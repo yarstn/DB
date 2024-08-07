@@ -1,0 +1,51 @@
+create database store;
+create table countries(
+    code int primary key ,
+    name varchar(20) not null unique ,
+    continent_name varchar(20) not null unique
+);
+create table users(
+    id int primary key ,
+    full_name varchar(20) not null unique ,
+    email varchar(20) not null unique ,
+    gender char(1) not null unique check ( gender='f' or gender='m' ) ,
+    date_of_birth varchar(15) not null unique ,
+    created_at datetime default CURRENT_TIMESTAMP,
+    country_code int not null,
+    foreign key (country_code) references countries(code)
+);
+create table orders(
+id int primary key  ,
+    user_id int not null ,
+    status varchar(6) not null check ( status='start' or status='finish' ),
+    created_at datetime default CURRENT_TIMESTAMP,
+    foreign key (user_id) references users(id)
+);
+create table products(
+    id int primary key  ,
+    name varchar(10) not null unique ,
+    price int  default 0,
+    status varchar(10) not null check ( status='valid' or status='expired' ),
+    created_at datetime default CURRENT_TIMESTAMP
+);
+create table order_products(
+    quantity int default 0,
+    order_id int  ,
+    product_id int  ,
+    foreign key (product_id) references products(id),
+    foreign key (order_id) references orders(id)
+);
+INSERT INTO countries (code, name, continent_name) VALUES (2, 'KSA', 'North Audi');
+INSERT INTO users VALUES (1, 'yara moh', 'yara.doe@example.com', 'f', '1999-01-01', NOW(), 2);
+INSERT INTO products VALUES (2, 'Laptopp', 1000, 'valid', NOW());
+INSERT INTO orders VALUES (1, 2, 'start', NOW());
+INSERT INTO order_products VALUES (0, 1, 2);
+UPDATE countries SET name = 'Saudi Arabia', continent_name = 'Asia' WHERE code = 2;
+DELETE FROM products WHERE id = 2;
+
+
+
+
+
+
+
